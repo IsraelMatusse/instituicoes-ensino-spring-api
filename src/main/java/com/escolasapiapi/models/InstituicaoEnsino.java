@@ -25,9 +25,9 @@ public class InstituicaoEnsino {
     private String codigo;
     private String sigla;
 
-    @ManyToMany
+    @ManyToOne
     private NivelEnsino nivelEnsino;
-    @ManyToMany
+    @ManyToOne
     private Provincia provincia;
 
     public InstituicaoEnsino(InstituicaoEnsinoCriarDTO dto, Provincia provincia, NivelEnsino nivelEnsino) throws NoSuchAlgorithmException {
@@ -36,6 +36,10 @@ public class InstituicaoEnsino {
         this.sigla=dto.sigla();
         this.provincia=provincia;
         this.nivelEnsino=nivelEnsino;
+    }
+
+    public InstituicaoEnsinoRespostaDTO toDTO(){
+        return new InstituicaoEnsinoRespostaDTO(designacao, sigla, codigo, id, provincia, nivelEnsino);
     }
 
 }
