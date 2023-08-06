@@ -35,4 +35,15 @@ public class InstituicaoEnsinoService {
     public List<InstituicaoEnsinoRespostaDTO> listarInstituicoesDeEnsino(){
         return instituicaoEnsinoRepo.findAll().stream().map(instituicaoEnsino -> new InstituicaoEnsinoRespostaDTO(instituicaoEnsino)).collect(Collectors.toList());
     }
+    //buscar instituicao de ensino pelo designacao
+    public InstituicaoEnsinoRespostaDTO buscarInstituicaoEnsinoPelaDesignacao(String designacao) throws ContentNotFound {
+        InstituicaoEnsino instituicaoEnsino= instituicaoEnsinoRepo.findByDesgignacaoIgnoreCase(designacao).orElseThrow(()->new ContentNotFound("Instituicao de ensino com a designacao" + designacao + "Nao foi encontrada" ));
+        return new InstituicaoEnsinoRespostaDTO(instituicaoEnsino);
+    }
+    //buscar instituicao de ensino por codigo
+    public InstituicaoEnsinoRespostaDTO buscarInstituicaoEnsinoPeloCodigo(String codigo) throws ContentNotFound {
+        InstituicaoEnsino instituicaoEnsino= instituicaoEnsinoRepo.findByCodigo(codigo).orElseThrow(()->new ContentNotFound("Instituicao de ensino com o codigo" + codigo + "Nao foi encontrada" ));
+        return new InstituicaoEnsinoRespostaDTO(instituicaoEnsino);
+    }
+    //buscar instituicao de ensino pelo id do nivel
 }
