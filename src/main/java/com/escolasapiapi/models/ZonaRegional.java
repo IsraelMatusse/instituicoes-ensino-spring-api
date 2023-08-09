@@ -9,14 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Provincia {
+public class ZonaRegional {
+
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String codigo;
     private String designacao;
     private String sigla;
-    private String codigo;
-
-    @ManyToOne
-    private ZonaRegional zonaRegional;
 }

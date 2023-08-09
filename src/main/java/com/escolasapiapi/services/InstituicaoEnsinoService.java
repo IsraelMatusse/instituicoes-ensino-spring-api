@@ -47,7 +47,6 @@ public class InstituicaoEnsinoService {
         }
         return novaInstituicaoEnsino;
 
-
     }
     public Boolean existePorDesignacao(String designacao){
         return instituicaoEnsinoRepo.existsByDesignacao(designacao);
@@ -62,6 +61,11 @@ public class InstituicaoEnsinoService {
     }
     public List<InstituicaoEnsinoRespostaDTO> listarInstituicoesDeEnsino(){
         return instituicaoEnsinoRepo.findAll().stream().map(instituicaoEnsino -> new InstituicaoEnsinoRespostaDTO(instituicaoEnsino)).collect(Collectors.toList());
+    }
+    public Page<InstituicaoEnsinoRespostaDTO> listarInstituicoesEnsinoPag(int size, int page, Sort sort){
+        Pageable pageable= PageRequest.of(page, size, sort);
+        Page<InstituicaoEnsino> instituicaoEnsinos= instituicaoEnsinoRepo.findAll(pageable);
+        return instituicaoEnsinos.map(InstituicaoEnsino::toDTO);
     }
     //buscar instituicao de ensino pelo designacao
     public InstituicaoEnsinoRespostaDTO buscarInstituicaoEnsinoPelaDesignacao(String designacao) throws ContentNotFound {
