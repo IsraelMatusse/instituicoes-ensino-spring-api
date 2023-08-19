@@ -11,7 +11,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class ProvinciaService {
-    private ProvinciaRepo provinciaRepo;
+
+    private final ProvinciaRepo provinciaRepo;
 
     public Provincia criar(Provincia provincia){
         return provinciaRepo.save(provincia);
@@ -22,6 +23,15 @@ public class ProvinciaService {
     }
     public List<Provincia> listarProvincias(){
         return provinciaRepo.findAll();
+    }
+    public boolean existemProvincias(){
+        Long provinvicias= provinciaRepo.count();
+        if(provinvicias>0){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 
