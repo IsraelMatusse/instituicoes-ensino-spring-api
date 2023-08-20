@@ -17,8 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -51,15 +50,15 @@ public class InstituicaoEnsinoService {
         return instituicaoEnsinoRepo.existsByDesignacao(designacao);
     }
 
-    public InstituicaoEnsino buscarPorId(Long id) throws ContentNotFound {
-        return instituicaoEnsinoRepo.findById(id).orElseThrow(()->new ContentNotFound("Instituicao de ensino com o id" + id +" nao foi encontrada"));
-    }
-    public InstituicaoEnsinoRespostaDTO buscarPorIdRes(Long id) throws ContentNotFound {
-        InstituicaoEnsino instituicaoEnsino=instituicaoEnsinoRepo.findById(id).orElseThrow(()->new ContentNotFound("Instituicao de ensino com o id" + id +" nao foi encontrada"));;
+
+    public InstituicaoEnsinoRespostaDTO buscarInstituicaoDeEnsinoPeloId(Long id ) throws ContentNotFound {
+
+        Objects.requireNonNull(id, "O Id da instituicao nao pode ser nulo");
+        if (instituicaoEnsinoRepo.existsById(id)){
+            throw new ContentNotFound("Instituicao com o id" +id + "nao foi encontrada");
+        }
+        InstituicaoEnsino instituicaoEnsino=instituicaoEnsinoRepo.findOneById(id);
         return new InstituicaoEnsinoRespostaDTO(instituicaoEnsino);
-    }
-    public List<InstituicaoEnsinoRespostaDTO> listarInstituicoesDeEnsino(){
-        return instituicaoEnsinoRepo.findAll().stream().map(instituicaoEnsino -> new InstituicaoEnsinoRespostaDTO(instituicaoEnsino)).collect(Collectors.toList());
     }
     public Page<InstituicaoEnsinoRespostaDTO> listarInstituicoesEnsinoPag(int size, int page, Sort sort){
         Pageable pageable= PageRequest.of(page, size, sort);
@@ -73,7 +72,12 @@ public class InstituicaoEnsinoService {
     }
     //buscar instituicao de ensino por codigo
     public InstituicaoEnsinoRespostaDTO buscarInstituicaoEnsinoPeloCodigo(String codigo) throws ContentNotFound {
-        InstituicaoEnsino instituicaoEnsino= instituicaoEnsinoRepo.findByCodigo(codigo).orElseThrow(()->new ContentNotFound("Instituicao de ensino com o codigo" + codigo + "Nao foi encontrada" ));
+
+        Objects.requireNonNull(codigo, "O codigo da instituicao nao pode ser nulo");
+        if(!instituicaoEnsinoRepo.existsByCodigo(codigo)){
+            throw new ContentNotFound("Instituicao nao encontrada");
+        }
+       InstituicaoEnsino instituicaoEnsino= instituicaoEnsinoRepo.findByCodigo(codigo);
         return new InstituicaoEnsinoRespostaDTO(instituicaoEnsino);
     }
     //buscar instituicao de ensino pelo id do nivel
@@ -115,7 +119,7 @@ public class InstituicaoEnsinoService {
     //listar instituicoes de ensino pela designacao do nivel de ensino e provincia
     public Page<InstituicaoEnsinoRespostaDTO> listarInstituicaoEnsinoPelaDesignacaoProvinciaEDesignacaoNivelEnsino(String provincia, String nivelEnsino, Sort sort, int size, int page){
         Pageable pageable=PageRequest.of(page, size, sort);
-        Page<InstituicaoEnsino> instituicaoEnsinos=instituicaoEnsinoRepo.findByNivelEnsinoDesignacaoContainigIgnoreCaseAndProvinciaDesignacaoContainingIgnoreCase(nivelEnsino, provincia, pageable);
+        Page<InstituicaoEnsino> instituicaoEnsinos=instituicaoEnsinoRepo.findByNivelEnsinoDesignacaoContainingIgnoreCaseAndProvinciaDesignacaoContainingIgnoreCase(nivelEnsino, provincia, pageable);
         return instituicaoEnsinos.map(InstituicaoEnsino::toDTO);
     }
 

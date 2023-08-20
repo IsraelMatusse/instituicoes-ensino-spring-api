@@ -11,13 +11,16 @@ import java.util.Optional;
 @Repository
 public interface InstituicaoEnsinoRepo extends JpaRepository<InstituicaoEnsino, Long> {
 
-    Optional<InstituicaoEnsino>findByCodigo(String codigo);
+    InstituicaoEnsino findByCodigo(String codigo);
     Optional<InstituicaoEnsino> findByDesignacaoContainingIgnoreCase(String designacao);
     Page<InstituicaoEnsino> findByNivelEnsinoId(Long idNivelEnsino, Pageable pageable);
     Page<InstituicaoEnsino> findByNivelEnsinoDesignacaoContainingIgnoreCase(String designacao, Pageable pageable);
     Page<InstituicaoEnsino> findByNivelEnsinoIdAndProvinciaId(Long idNivelEnsino, Long idProvincia, Pageable pageable);
-    Page<InstituicaoEnsino> findByNivelEnsinoDesignacaoContainigIgnoreCaseAndProvinciaDesignacaoContainingIgnoreCase(String designacaoNivelEnsino, String designacaoProvincia, Pageable pageable);
+    Page<InstituicaoEnsino> findByNivelEnsinoDesignacaoContainingIgnoreCaseAndProvinciaDesignacaoContainingIgnoreCase(String designacaoNivelEnsino, String designacaoProvincia, Pageable pageable);
     Page<InstituicaoEnsino> findByProvinciaId(Long id, Pageable pageable);
     Page<InstituicaoEnsino> findByProvinciaDesignacaoContainingIgnoreCase(String designacao, Pageable pageable);
+    InstituicaoEnsino findOneById(Long id );
     Boolean existsByDesignacao(String designacao);
+    boolean existsById(Long id);
+    boolean existsByCodigo(String codigo);
 }

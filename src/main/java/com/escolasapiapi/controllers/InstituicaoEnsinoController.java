@@ -2,6 +2,7 @@ package com.escolasapiapi.controllers;
 
 import com.escolasapiapi.dtos.ResponseAPI;
 import com.escolasapiapi.dtos.instituicaoEnsinoDTO.InstituicaoEnsinoRespostaDTO;
+import com.escolasapiapi.exceptions.ContentNotFound;
 import com.escolasapiapi.services.InstituicaoEnsinoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -36,6 +37,22 @@ public class InstituicaoEnsinoController {
         headers.add("Total Elements", String.valueOf(instituicaoEnsinoRespostaDTOPage.getTotalElements()));
         headers.add("Total Pages", String.valueOf(instituicaoEnsinoRespostaDTOPage.getTotalPages()));
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseAPI> buscarInstituicaoPeloId(
+            @PathVariable(value = "id") Long id) throws ContentNotFound {
+        InstituicaoEnsinoRespostaDTO instituicaoEnsinoResposta= instituicaoEnsinoService.buscarInstituicaoDeEnsinoPeloId(id);
+        ResponseAPI response = new ResponseAPI(true,"Instituicoes de ensino com o id " +id , instituicaoEnsinoResposta );
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/codigo/{codigo}")
+    public ResponseEntity<ResponseAPI> buscarInstituicaoPeloCodigo(@PathVariable(value = "codigo") String codigo) throws ContentNotFound {
+        InstituicaoEnsinoRespostaDTO instituicaoEnsinoRespostaDTOPage = instituicaoEnsinoService.buscarInstituicaoEnsinoPeloCodigo(codigo);
+        ResponseAPI response = new ResponseAPI(true,"Instituicoes de ensino com o codigo " + codigo, instituicaoEnsinoRespostaDTOPage );
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/nivel-ensino/{id}")
