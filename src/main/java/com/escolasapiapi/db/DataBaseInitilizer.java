@@ -13,11 +13,11 @@ import java.util.logging.Logger;
 @Component
 @RequiredArgsConstructor
 public class DataBaseInitilizer implements CommandLineRunner {
-    @PersistenceContext
+  @PersistenceContext
     private EntityManager entityManager;
 
     private final ProvinciaService provinciaService;
-    private Logger logger;
+
     @Override
     @Transactional
     public void run(String... args) throws Exception {
@@ -29,7 +29,7 @@ public class DataBaseInitilizer implements CommandLineRunner {
                 "    (2, '2', 'Zona centro', 'zc'),\n" +
                 "    (3, '3', 'Zona Sul', 'zs');";
         entityManager.createNativeQuery(sqlZonasRegionais).executeUpdate();
-        System.out.println("Zona Regional Inserted successfully!");
+
 
         String sqlQueryProvincias="INSERT INTO `provincia` (`id`, `codigo`, `designacao`, `sigla`, `zona_regional_id`)\n" +
                 "VALUES\n" +
@@ -178,6 +178,7 @@ public class DataBaseInitilizer implements CommandLineRunner {
 
 
 }
+
 
 
 }

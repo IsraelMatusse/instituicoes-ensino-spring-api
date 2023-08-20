@@ -8,7 +8,6 @@ import com.escolasapiapi.models.InstituicaoEnsino;
 import com.escolasapiapi.models.NivelEnsino;
 import com.escolasapiapi.models.Provincia;
 import com.escolasapiapi.repositores.InstituicaoEnsinoRepo;
-import com.escolasapiapi.repositores.ProvinciaRepo;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.HibernateException;
 import org.springframework.data.domain.Page;
@@ -39,7 +38,7 @@ public class InstituicaoEnsinoService {
         }
         Provincia provincia= provinciaService.buscarPorId(dto.provincia());
         NivelEnsino nivelEnsino=nivelEnsinoService.buscarNivelEnsinoPorId(dto.nivelEnsino());
-        InstituicaoEnsino novaInstituicaoEnsino=null;
+        InstituicaoEnsino novaInstituicaoEnsino;
         try {
             novaInstituicaoEnsino = new InstituicaoEnsino(dto, provincia, nivelEnsino);
         }catch (HibernateException | NoSuchAlgorithmException e){
@@ -69,7 +68,7 @@ public class InstituicaoEnsinoService {
     }
     //buscar instituicao de ensino pelo designacao
     public InstituicaoEnsinoRespostaDTO buscarInstituicaoEnsinoPelaDesignacao(String designacao) throws ContentNotFound {
-        InstituicaoEnsino instituicaoEnsino= instituicaoEnsinoRepo.findByDesignacaoIgnoreCase(designacao).orElseThrow(()->new ContentNotFound("Instituicao de ensino com a designacao" + designacao + "Nao foi encontrada" ));
+        InstituicaoEnsino instituicaoEnsino= instituicaoEnsinoRepo.findByDesignacaoContainingIgnoreCase(designacao).orElseThrow(()->new ContentNotFound("Instituicao de ensino com a designacao" + designacao + "Nao foi encontrada" ));
         return new InstituicaoEnsinoRespostaDTO(instituicaoEnsino);
     }
     //buscar instituicao de ensino por codigo
@@ -87,7 +86,7 @@ public class InstituicaoEnsinoService {
     //buscar instituicoes de ensino pela designacao do nivel de ensino
     public Page<InstituicaoEnsinoRespostaDTO> listarInstituicoesDeEnsinoPelaDesignacaoDoNivel(String designacao, int size, Sort sort, int page){
         Pageable pageable=PageRequest.of(page, size, sort);
-        Page<InstituicaoEnsino> instituicaoEnsinos= instituicaoEnsinoRepo.findByNivelEnsinoDesignacaoIgnoreCase(designacao, pageable);
+        Page<InstituicaoEnsino> instituicaoEnsinos= instituicaoEnsinoRepo.findByNivelEnsinoDesignacaoContainingIgnoreCase(designacao, pageable);
         return instituicaoEnsinos.map(InstituicaoEnsino::toDTO);
     }
 
@@ -101,21 +100,22 @@ public class InstituicaoEnsinoService {
     //listar instituicoes de ensino pela designacao da provincia
     public Page<InstituicaoEnsinoRespostaDTO> listarInstituicoesDeEnsinoPelaDesignacaoDaProvincia(String designacao, int size, int page, Sort sort){
         Pageable pageable= PageRequest.of(page, size,sort );
-        Page<InstituicaoEnsino> instituicaoEnsinos=instituicaoEnsinoRepo.findByProvinciaDesignacaoIgnoreCase(designacao, pageable);
+        Page<InstituicaoEnsino> instituicaoEnsinos=instituicaoEnsinoRepo.findByProvinciaDesignacaoContainingIgnoreCase(designacao, pageable);
         return instituicaoEnsinos.map(InstituicaoEnsino::toDTO);
     }
 
     //Listar Instituicoes de ensino pela id da provincia e nivel de ensino
     public Page<InstituicaoEnsinoRespostaDTO> listarInstituicoesDeEnsinoPeloIdDoNivelDeEnsinoEIdDProvincia(Long idNivelEnsino, Long idProvincia, Sort sort, int size, int page){
         Pageable pageable=PageRequest.of(page, size, sort);
-        Page<InstituicaoEnsino> instituicaoEnsinos= instituicaoEnsinoRepo.findByNivelEnsinoIdAndProvinciaId(idNivelEnsino, idProvincia, pageable);
+        Page<InstituicaoEnsino> instituicaoEnsinos = instituicaoEnsinoRepo.findByNivelEnsinoIdAndProvinciaId(idNivelEnsino, idProvincia, pageable);
         return instituicaoEnsinos.map(InstituicaoEnsino::toDTO);
+
     }
 
     //listar instituicoes de ensino pela designacao do nivel de ensino e provincia
     public Page<InstituicaoEnsinoRespostaDTO> listarInstituicaoEnsinoPelaDesignacaoProvinciaEDesignacaoNivelEnsino(String provincia, String nivelEnsino, Sort sort, int size, int page){
         Pageable pageable=PageRequest.of(page, size, sort);
-        Page<InstituicaoEnsino> instituicaoEnsinos=instituicaoEnsinoRepo.findByNivelEnsinoDesignacaoIgnoreCaseAndProvinciaDesignacaoIgnoreCase(nivelEnsino, provincia, pageable);
+        Page<InstituicaoEnsino> instituicaoEnsinos=instituicaoEnsinoRepo.findByNivelEnsinoDesignacaoContainigIgnoreCaseAndProvinciaDesignacaoContainingIgnoreCase(nivelEnsino, provincia, pageable);
         return instituicaoEnsinos.map(InstituicaoEnsino::toDTO);
     }
 

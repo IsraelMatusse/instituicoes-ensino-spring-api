@@ -12,12 +12,12 @@ import java.util.Optional;
 public interface InstituicaoEnsinoRepo extends JpaRepository<InstituicaoEnsino, Long> {
 
     Optional<InstituicaoEnsino>findByCodigo(String codigo);
-    Optional<InstituicaoEnsino>findByDesignacaoIgnoreCase(String designacao);
+    Optional<InstituicaoEnsino> findByDesignacaoContainingIgnoreCase(String designacao);
     Page<InstituicaoEnsino> findByNivelEnsinoId(Long idNivelEnsino, Pageable pageable);
-    Page<InstituicaoEnsino> findByNivelEnsinoDesignacaoIgnoreCase(String designacao, Pageable pageable);
+    Page<InstituicaoEnsino> findByNivelEnsinoDesignacaoContainingIgnoreCase(String designacao, Pageable pageable);
     Page<InstituicaoEnsino> findByNivelEnsinoIdAndProvinciaId(Long idNivelEnsino, Long idProvincia, Pageable pageable);
-    Page<InstituicaoEnsino> findByNivelEnsinoDesignacaoIgnoreCaseAndProvinciaDesignacaoIgnoreCase(String designacaoNivelEnsino, String designacaoProvincia, Pageable pageable);
+    Page<InstituicaoEnsino> findByNivelEnsinoDesignacaoContainigIgnoreCaseAndProvinciaDesignacaoContainingIgnoreCase(String designacaoNivelEnsino, String designacaoProvincia, Pageable pageable);
     Page<InstituicaoEnsino> findByProvinciaId(Long id, Pageable pageable);
-    Page<InstituicaoEnsino> findByProvinciaDesignacaoIgnoreCase(String designacao, Pageable pageable);
+    Page<InstituicaoEnsino> findByProvinciaDesignacaoContainingIgnoreCase(String designacao, Pageable pageable);
     Boolean existsByDesignacao(String designacao);
 }
