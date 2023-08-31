@@ -1,4 +1,4 @@
-package com.escolasapiapi.db;
+package com.escolasapiapi;
 
 import com.escolasapiapi.services.ProvinciaService;
 import jakarta.persistence.EntityManager;
