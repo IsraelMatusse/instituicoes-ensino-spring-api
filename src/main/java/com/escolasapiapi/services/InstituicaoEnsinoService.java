@@ -54,8 +54,8 @@ public class InstituicaoEnsinoService {
     public InstituicaoEnsinoRespostaDTO buscarInstituicaoDeEnsinoPeloId(Long id ) throws ContentNotFound {
 
         Objects.requireNonNull(id, "O Id da instituicao nao pode ser nulo");
-        if (instituicaoEnsinoRepo.existsById(id)){
-            throw new ContentNotFound("Instituicao com o id" +id + "nao foi encontrada");
+        if (!instituicaoEnsinoRepo.existsById(id)){
+            throw new ContentNotFound("Instituicao com o id " +id + "nao foi encontrada");
         }
         InstituicaoEnsino instituicaoEnsino=instituicaoEnsinoRepo.findOneById(id);
         return new InstituicaoEnsinoRespostaDTO(instituicaoEnsino);
